@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vdb name="Test" version="1">
+	<description>Test Dynamic VDB</description>
+	<model name="Example">
+		<property name="importer.tableTypes" value="TABLE,VIEW"/>
+		<property name="importer.useFullSchemaName" value="false"/>
+		<property name="importer.widenUnsignedTypes" value="false"/>
+		<source name="postgresql-connector" translator-name="postgresql" connection-jndi-name="java:jboss/datasources/TestDB"/>
+	</model>
+</vdb>
