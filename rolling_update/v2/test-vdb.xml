@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vdb name="Test" version="1">
+
+	<property name="UseConnectorMetadata" value="true"/>
+
+	<model name="One" type="VIRTUAL">
+		<metadata type="DDL"><![CDATA[
+
+		CREATE FUNCTION get_node_id() RETURNS string
+		AS BEGIN
+			RETURN CONVERT(NODE_ID(), string);
+		END;
+
+		CREATE FUNCTION f() RETURNS integer
+		AS BEGIN
+			RETURN 2;
+		END;
+
+		CREATE VIEW TestFunction (
+				hodnota integer PRIMARY KEY,
+				node_id varchar(64)
+			)
+			AS SELECT * FROM
+				(SELECT * FROM f) AS fun
+				,
+				(SELECT * FROM get_node_id) AS node
+
+		]]>
+		</metadata>
+	</model>
+
+</vdb>
