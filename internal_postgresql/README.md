@@ -11,7 +11,12 @@ oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templ
 oc create -f https://raw.githubusercontent.com/openshift/origin/master/examples/db-templates/postgresql-ephemeral-template.json
 
 # Start postgresql
-oc new-app --template=postgresql-ephemeral -p DATABASE_SERVICE_NAME=testdb-postgresql -p POSTGRESQL_USER=testuser -p POSTGRESQL_PASSWORD=testpwd -p POSTGRESQL_DATABASE=testdb -p POSTGRESQL_VERSION=latest
+oc new-app --template=postgresql-ephemeral \
+-p DATABASE_SERVICE_NAME=testdb-postgresql \
+-p POSTGRESQL_USER=testuser \
+-p POSTGRESQL_PASSWORD=testpwd \
+-p POSTGRESQL_DATABASE=testdb \
+-p POSTGRESQL_VERSION=latest
 # Init postgres
 oc exec -i <postgresql_pod> -- /bin/sh -i -c 'psql -h 127.0.0.1 -U $POSTGRESQL_USER -q -d $POSTGRESQL_DATABASE' < init.sql
 
