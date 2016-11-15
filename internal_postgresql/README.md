@@ -44,4 +44,8 @@ oc process jdv63-secure-s2i \
 -v SOURCE_REPOSITORY_REF=master \
 -v CONTEXT_DIR='internal_postgresql/vdb' | oc create -f -
 
+# Query JDV
+cd client
+mvn package exec:java -Dexec.args='<jdbc-jdv-app-route>' -Dorg.teiid.ssl.trustStore=truststore.ts
+
 ```
