@@ -15,7 +15,7 @@
         <extension module="org.jboss.as.jsf"/>
         <extension module="org.jboss.as.logging"/>
         <extension module="org.jboss.as.mail"/>
-        <extension module="org.jboss.as.messaging"/>
+        <!-- ##MESSAGING_EXTENSION## -->
         <extension module="org.jboss.as.naming"/>
         <extension module="org.jboss.as.pojo"/>
         <extension module="org.jboss.as.remoting"/>
@@ -134,8 +134,7 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:datasources:1.2">
             <datasources>
-                <datasource jta="true" jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true"> <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</connection-url> <driver>h2</driver> <security> <user-name>sa</user-name> <password>sa</password> </security> </datasource><xa-datasource jndi-name="java:jboss/datasources/TestDB" pool-name="testdb_postgresql-TESTDB_POSTGRESQL" use-java-context="true" enabled="true"> <xa-datasource-property name="DatabaseName">testdb</xa-datasource-property> <xa-datasource-property name="PortNumber">5432</xa-datasource-property> <xa-datasource-property name="ServerName">172.30.7.90</xa-datasource-property> <driver>postgresql</driver> <security> <user-name>testuser</user-name> <password>testpwd</password> </security> <validation> <validate-on-match>true</validate-on-match> <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"></valid-connection-checker> <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"></exception-sorter> </validation> </xa-datasource>
-<!-- ##DATASOURCES## -->
+                <!-- ##DATASOURCES## -->
                 <datasource jndi-name="java:/datasources/ModeShapeDS" pool-name="ModeShapeDS" enabled="true" use-java-context="true">
                     <connection-url>jdbc:jcr:jndi:jcr?repositoryName=dv</connection-url>
                     <connection-property name="teiidsupport">
@@ -172,7 +171,7 @@
             </datasources>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:deployment-scanner:1.1">
-            <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" auto-deploy-exploded="false"/> 
+            <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" auto-deploy-exploded="##AUTO_DEPLOY_EXPLODED##"/> 
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:ee:1.2">
             <spec-descriptor-property-replacement>false</spec-descriptor-property-replacement>
@@ -207,7 +206,7 @@
                 <cluster-passivation-store name="infinispan" cache-container="ejb"/>
             </passivation-stores>
             <async thread-pool-name="default"/>
-                        <timer-service thread-pool-name="default" default-data-store="default-file-store">                <data-stores>                    <file-data-store name="default-file-store" path="timer-service-data" relative-to="jboss.server.data.dir"/>                    <!-- ##DATASTORES## -->                </data-stores>            </timer-service>
+            <!-- ##TIMER_SERVICE## -->
             <remote connector-ref="remoting-connector" thread-pool-name="default"/>
             <thread-pools>
                 <thread-pool name="default">
@@ -330,14 +329,8 @@
                 <protocol type="pbcast.NAKACK"/>
                 <protocol type="UNICAST2"/>
                 <protocol type="pbcast.STABLE"/>
-                
-                <protocol type="AUTH">
-                    <property name="auth_class">org.jgroups.auth.MD5Token</property>
-                    <property name="token_hash">SHA</property>
-                    <property name="auth_value">fb4sKmkN</property>
-                </protocol>
-
-                          <protocol type="SYM_ENCRYPT">            <property name="provider">SunJCE</property>            <property name="sym_algorithm">AES</property>            <property name="encrypt_entire_message">true</property>            <property name="keystore_name">/etc/jgroups-encrypt-secret-volume/jgroups.jceks</property>            <property name="store_password">password</property>            <property name="alias">secret-key</property>          </protocol>
+                <!-- ##JGROUPS_AUTH## -->
+                <!-- ##JGROUPS_ENCRYPT## -->
                 <protocol type="pbcast.GMS"/>
                 <protocol type="UFC"/>
                 <protocol type="MFC"/>
@@ -354,14 +347,8 @@
                 <protocol type="pbcast.NAKACK"/>
                 <protocol type="UNICAST2"/>
                 <protocol type="pbcast.STABLE"/>
-                
-                <protocol type="AUTH">
-                    <property name="auth_class">org.jgroups.auth.MD5Token</property>
-                    <property name="token_hash">SHA</property>
-                    <property name="auth_value">fb4sKmkN</property>
-                </protocol>
-
-                          <protocol type="SYM_ENCRYPT">            <property name="provider">SunJCE</property>            <property name="sym_algorithm">AES</property>            <property name="encrypt_entire_message">true</property>            <property name="keystore_name">/etc/jgroups-encrypt-secret-volume/jgroups.jceks</property>            <property name="store_password">password</property>            <property name="alias">secret-key</property>          </protocol>
+                <!-- ##JGROUPS_AUTH## -->
+                <!-- ##JGROUPS_ENCRYPT## -->
                 <protocol type="pbcast.GMS"/>
                 <protocol type="UFC"/>
                 <protocol type="MFC"/>
@@ -385,113 +372,7 @@
                 <smtp-server outbound-socket-binding-ref="mail-smtp"/>
             </mail-session>
         </subsystem>
-                <subsystem xmlns="urn:jboss:domain:messaging:1.4">
-            <hornetq-server>
-                <cluster-password>${jboss.messaging.cluster.password:CHANGE ME!!}</cluster-password>
-                <persistence-enabled>true</persistence-enabled>
-                <journal-type>NIO</journal-type>
-                <journal-min-files>2</journal-min-files>
-                <connectors>
-                    <netty-connector name="netty" socket-binding="messaging"/>
-                    <netty-connector name="netty-throughput" socket-binding="messaging-throughput">
-                        <param key="batch-delay" value="50"/>
-                    </netty-connector>
-                    <in-vm-connector name="in-vm" server-id="0"/>
-                </connectors>
-                <acceptors>
-                    <netty-acceptor name="netty" socket-binding="messaging"/>
-                    <netty-acceptor name="netty-throughput" socket-binding="messaging-throughput">
-                        <param key="batch-delay" value="50"/>
-                        <param key="direct-deliver" value="false"/>
-                    </netty-acceptor>
-                    <in-vm-acceptor name="in-vm" server-id="0"/>
-                </acceptors>
-                <broadcast-groups>
-                    <broadcast-group name="bg-group1">
-                        <jgroups-stack>tcp</jgroups-stack>
-                        <jgroups-channel>hornetq-channel</jgroups-channel>
-                        <broadcast-period>5000</broadcast-period>
-                        <connector-ref>netty</connector-ref>
-                    </broadcast-group>
-                </broadcast-groups>
-                <discovery-groups>
-                    <discovery-group name="dg-group1">
-                        <jgroups-stack>tcp</jgroups-stack>
-                        <jgroups-channel>hornetq-channel</jgroups-channel>
-                        <refresh-timeout>10000</refresh-timeout>
-                    </discovery-group>
-                </discovery-groups>
-                <cluster-connections>
-                    <cluster-connection name="my-cluster">
-                        <address>jms</address>
-                        <connector-ref>netty</connector-ref>
-                        <discovery-group-ref discovery-group-name="dg-group1"/>
-                    </cluster-connection>
-                </cluster-connections>
-                <security-settings>
-                    <security-setting match="#">
-                        <permission type="send" roles="guest"/>
-                        <permission type="consume" roles="guest"/>
-                        <permission type="createNonDurableQueue" roles="guest"/>
-                        <permission type="deleteNonDurableQueue" roles="guest"/>
-                    </security-setting>
-                </security-settings>
-                <address-settings>
-                    <!--default for catch all-->
-                    <address-setting match="#">
-                        <dead-letter-address>jms.queue.DLQ</dead-letter-address>
-                        <expiry-address>jms.queue.ExpiryQueue</expiry-address>
-                        <redelivery-delay>0</redelivery-delay>
-                        <redistribution-delay>1000</redistribution-delay>
-                        <max-size-bytes>10485760</max-size-bytes>
-                        <address-full-policy>PAGE</address-full-policy>
-                        <page-size-bytes>2097152</page-size-bytes>
-                        <message-counter-history-day-limit>10</message-counter-history-day-limit>
-                    </address-setting>
-                </address-settings>
-                <jms-connection-factories>
-                    <connection-factory name="InVmConnectionFactory">
-                        <connectors>
-                            <connector-ref connector-name="in-vm"/>
-                        </connectors>
-                        <entries>
-                            <entry name="java:/ConnectionFactory"/>
-                        </entries>
-                    </connection-factory>
-                    <connection-factory name="RemoteConnectionFactory">
-                        <connectors>
-                            <connector-ref connector-name="netty"/>
-                        </connectors>
-                        <entries>
-                            <entry name="java:jboss/exported/jms/RemoteConnectionFactory"/>
-                        </entries>
-                        <ha>true</ha>
-                        <block-on-acknowledge>true</block-on-acknowledge>
-                        <retry-interval>1000</retry-interval>
-                        <retry-interval-multiplier>1.0</retry-interval-multiplier>
-                        <reconnect-attempts>-1</reconnect-attempts>
-                    </connection-factory>
-                    <pooled-connection-factory name="hornetq-ra">
-                        <transaction mode="xa"/>
-                        <connectors>
-                            <connector-ref connector-name="in-vm"/>
-                        </connectors>
-                        <entries>
-                            <entry name="java:/JmsXA"/>
-                        </entries>
-                    </pooled-connection-factory>
-                </jms-connection-factories>
-                <jms-destinations>
-                    <jms-queue name="ExpiryQueue">
-                        <entry name="java:/jms/queue/ExpiryQueue"/>
-                    </jms-queue>
-                    <jms-queue name="DLQ">
-                        <entry name="java:/jms/queue/DLQ"/>
-                    </jms-queue>
-                    
-                </jms-destinations>
-            </hornetq-server>
-        </subsystem>
+        <!-- ##MESSAGING_SUBSYSTEM## -->
         <subsystem xmlns="urn:jboss:domain:naming:1.4">
             <remote-naming/>
         </subsystem>
@@ -565,13 +446,13 @@
                 <security-domain name="encrypted-modeshape">
                     <authentication>
                         <login-module code="org.picketbox.datasource.security.SecureIdentityLoginModule" flag="required">
-                            <module-option name="username" value="EuXlynYN"/>
-                            <module-option name="password" value="-45a858cd19769d582a214530487ac89b"/>
+                            <module-option name="username" value="##MODESHAPE_USERNAME##"/>
+                            <module-option name="password" value="##MODESHAPE_PASSWORD##"/>
                         </login-module>
                     </authentication>
                 </security-domain>
                 <!-- ##KEYCLOAK_SECURITY_DOMAIN## -->
-                <!-- no additional security domains configured --><!-- no additional security domains configured --><!-- ##ADDITIONAL_SECURITY_DOMAINS## -->
+                <!-- ##ADDITIONAL_SECURITY_DOMAINS## -->
             </security-domains>
         </subsystem>
          <subsystem xmlns="urn:jboss:domain:threads:1.1">
@@ -591,7 +472,7 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:web:2.2" default-virtual-server="default-host" native="false">
             <connector name="http" protocol="HTTP/1.1" scheme="http" socket-binding="http"/>
-            <connector name="https" protocol="HTTP/1.1" socket-binding="https" scheme="https" secure="true">                 <ssl name="jboss" password="mykeystorepass" certificate-key-file="/etc/datavirt-secret-volume/keystore.jks" />             </connector>
+            <!-- ##HTTPS## -->
             <virtual-server name="default-host" enable-welcome-root="false"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:1.2">
@@ -643,7 +524,13 @@
             <transport name="jdbc" socket-binding="teiid-jdbc" protocol="teiid">
                 <authentication security-domain="teiid-security"/>
             </transport>
-            <transport name="secure-jdbc" socket-binding="secure-teiid-jdbc" protocol="teiid"><authentication security-domain="teiid-security"/><ssl mode="enabled" authentication-mode="anonymous" ssl-protocol="TLSv1.2" keymanagement-algorithm="algo"><keystore name="/etc/datavirt-secret-volume//etc/datavirt-secret-volume/keystore.jks" password="mykeystorepass" type="JKS" key-alias="jboss"/><truststore name="/etc/datavirt-secret-volume//etc/datavirt-secret-volume/keystore.jks" password="mykeystorepass"/></ssl></transport>
+            <transport name="secure-jdbc" socket-binding="secure-teiid-jdbc" protocol="teiid">
+                <authentication security-domain="teiid-security"/>
+                <ssl mode="enabled" authentication-mode="anonymous" ssl-protocol="TLSv1.2" keymanagement-algorithm="algo">
+                    <keystore name="/etc/datavirt-secret-volume//etc/datavirt-secret-volume/keystore.jks" password="mykeystorepass" type="JKS" key-alias="jboss"/>
+                    <truststore name="/etc/datavirt-secret-volume//etc/datavirt-secret-volume/keystore.jks" password="mykeystorepass"/>
+                </ssl>
+            </transport>
             <transport name="odbc" socket-binding="teiid-odbc" protocol="pg">
                 <authentication security-domain="teiid-security"/>
             </transport>
@@ -725,7 +612,7 @@
         <socket-binding name="jgroups-tcp-fd" port="57600"/>
         <socket-binding name="jgroups-udp" port="55200" multicast-address="${jboss.default.multicast.address:230.0.0.4}" multicast-port="45688"/>
         <socket-binding name="jgroups-udp-fd" port="54200"/>
-        <socket-binding name="messaging" port="5445"/><socket-binding name="messaging-throughput" port="5455"/>
+        <!-- ##MESSAGING_PORTS## -->
         <socket-binding name="remoting" port="4447"/>
         <socket-binding name="teiid-jdbc" port="31000" interface="any"/>
         <socket-binding name="secure-teiid-jdbc" port="31443" interface="any"/>
