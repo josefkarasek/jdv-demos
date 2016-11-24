@@ -526,7 +526,7 @@
             </transport>
             <transport name="secure-jdbc" socket-binding="secure-teiid-jdbc" protocol="teiid">
                 <authentication security-domain="teiid-security"/>
-                <ssl mode="enabled" authentication-mode="1-way" ssl-protocol="TLSv1.2" keymanagement-algorithm="algo">
+                <ssl mode="enabled" authentication-mode="1-way" ssl-protocol="TLSv1.2" keymanagement-algorithm="SunX509">
                     <keystore name="/etc/datavirt-secret-volume/keystore.jks" password="mykeystorepass" type="JKS" key-alias="jboss"/>
                     <truststore name="/etc/datavirt-secret-volume/keystore.jks" password="mykeystorepass"/>
                 </ssl>
