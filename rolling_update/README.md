@@ -19,7 +19,7 @@ cat <<EOF | oc create -n openshift -f -
 EOF
 
 # Create Service Account
-oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/secrets/datavirt-app-secret.json
+oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/secrets/datavirt-app-secret.yaml
 oc policy add-role-to-user view system:serviceaccount:$(oc project -q):datavirt-service-account -n $(oc project -q)
 
 # Create Template

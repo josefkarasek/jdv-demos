@@ -49,6 +49,5 @@ oc process datavirt63-secure-s2i \
 
 # Query JDV
 cd client
-mvn package exec:java -Dexec.args='<jdbc-jdv-app-route>' -Dorg.teiid.ssl.trustStore=truststore.ts
-
+mvn package exec:java -Dorg.teiid.ssl.trustStore=truststore.ts -Dexec.args='<jdbc-jdv-app-route>'
 ```

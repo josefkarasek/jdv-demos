@@ -11,7 +11,7 @@ cat <<EOF | oc create -n openshift -f -
     "name": "jboss-datavirt63-openshift"
   },
   "spec": {
-    "dockerImageRepository": "<docker_repository_url>"
+    "dockerImageRepository": "registry.access.redhat.com/jboss-datavirt-6/datavirt63-openshift"
   }
 }
 EOF
