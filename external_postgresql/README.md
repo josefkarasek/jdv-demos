@@ -17,11 +17,18 @@ docker run -d -p 32769:5432 \
 sudo docker exec -i <pod_id> /bin/sh -i -c 'psql -h 127.0.0.1 -U $POSTGRESQL_USER -q -d $POSTGRESQL_DATABASE' < init.sql
 
 # Create Service Account
-oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/secrets/datavirt-app-secret.json
+oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/secrets/datavirt-app-secret.yaml
 
 # Create templates
 # JDV secured
 oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/datavirt/datavirt63-secure-s2i.json
+# By default the quickstart configuration uses 'derby' data source,
+# to use postgresql add this variable to deployment config in
+# template
+oc edit template datavirt63-secure-s2i 
+# copy-paste:
+          - name: QS_DB_TYPE
+            value: postgresql
 
 # Create secret with configuration
 oc secrets new datavirt-app-config datasources.env
@@ -36,5 +43,5 @@ oc process datavirt63-secure-s2i \
 
 # Query JDV
 cd client
-mvn package exec:java -Dexec.args='<jdbc-jdv-app-route>' -Dorg.teiid.ssl.trustStore=truststore.ts
+mvn package exec:java -Dorg.teiid.ssl.trustStore=truststore.ts -Dexec.args='<jdbc-jdv-app-route>'
 ```
