@@ -2,19 +2,8 @@
 # Create new project
 oc new-project jdv-datafederation
 
-# Create Image Stream
-cat <<EOF | oc create -n openshift -f -
-{
-  "kind": "ImageStream",
-  "apiVersion": "v1",
-  "metadata": {
-    "name": "jboss-datavirt63-openshift"
-  },
-  "spec": {
-    "dockerImageRepository": "registry.access.redhat.com/jboss-datavirt-6/datavirt63-openshift"
-  }
-}
-EOF
+# Create Image Stream if doesn't exist (performed by OpenShift administrator)
+oc create -f https://raw.githubusercontent.com/josefkarasek/jdv-demos/master/datafederation/datavirt-is.yaml -n openshift
 
 # Create Service Account
 oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/secrets/datavirt-app-secret.yaml
