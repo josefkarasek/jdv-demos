@@ -20,5 +20,9 @@ oc new-app --template=datavirt63-secure-s2i \
   -p SOURCE_REPOSITORY_URL=https://github.com/josefkarasek/jdv-demos.git \
   -p CONTEXT_DIR=jdg_datasource/src \
   -p TEIID_USERNAME=teiidUser \
-  -p TEIID_PASSWORD=JBoss.123
+  -p TEIID_PASSWORD=JBoss.123 \
+  -p HTTPS_NAME=jboss \
+  -p HTTPS_PASSWORD=mykeystorepass \
+  -p JGROUPS_ENCRYPT_NAME=secret-key \
+  -p JGROUPS_ENCRYPT_PASSWORD=password
 ```
