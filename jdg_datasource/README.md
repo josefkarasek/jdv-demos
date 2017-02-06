@@ -4,7 +4,7 @@
 oc new-project jdv-jdg-datasource
 
 # Create templates
-# Datavirt with extensions
+# Datavirt secured
 oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/datavirt/datavirt63-secure-s2i.json
 # Datagrid basic
 oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/datagrid/datagrid65-basic.json
