@@ -29,7 +29,7 @@
 	<model name="PersonMatCache" type="Physical">
 		<property name="importer.useFullSchemaName" value="false"/>
 
-		<source name="PersonMatSource" translator-name="infinispan1" connection-jndi-name="java:/infinispanRemoteDSL"/>
+	<source name="PersonMatSource" translator-name="infinispan1" connection-jndi-name="java:/infinispanRemoteDSL"/>
 
 	</model>
 
@@ -61,14 +61,12 @@
 		</metadata>
 	</model>
 
-
 	<translator name="infinispan1" type="infinispan-cache-dsl">
-
 		<property name="SupportsDirectQueryProcedure" value="true"/>
 		<property name="SupportsNativeQueries" value="true"/>
-
 	</translator>
 	<translator name="translator-postgresql" type="postgresql">
 		<property name="SupportsNativeQueries" value="true"/>
 	</translator>
+
 </vdb>

@@ -32,19 +32,29 @@ items:
   metadata:
     name: datavirt-app-config
     annotations:
-      description: Datasource configuration for use with JDG as a datasource.
+      description: Datasource configuration for use with JDG as a materialization target.
   stringData:
     datasources.env: |
-      RESOURCE_ADAPTERS=JDG
+      #DATASOURCES
+      DATASOURCES=POSTGRESQL
+      POSTGRESQL_JNDI=java:jboss/datasources/TestDB
+      POSTGRESQL_DATABASE=testdb
+      POSTGRESQL_PASSWORD=testpwd
+      POSTGRESQL_DRIVER=postgresql
+      POSTGRESQL_USERNAME=testuser
 
-      JDG_ID=infinispanRemQSDSL
-      JDG_MODULE_SLOT=main
-      JDG_MODULE_ID=org.jboss.teiid.resource-adapter.infinispan.dsl
-      JDG_CONNECTION_CLASS=org.teiid.resource.adapter.infinispan.dsl.InfinispanManagedConnectionFactory
-      JDG_CONNECTION_JNDI=java:/infinispanRemoteDSL
-      JDG_PROPERTY_CacheTypeMap="addressbook:com.redhat.xpaas.datagrid.hotrod.query.domain.Person;id"
-      JDG_PROPERTY_ProtobufDefinitionFile=/xpaas/addressbook.proto
-      JDG_PROPERTY_MessageDescriptor=xpaas.Person
-      JDG_PROPERTY_Module=com.client.xpaas.person.pojos
-      JDG_PROPERTY_MessageMarshallers=com.redhat.xpaas.datagrid.hotrod.query.domain.Person:com.redhat.xpaas.datagrid.hotrod.query.marshallers.PersonMarshaller
-      JDG_PROPERTY_RemoteServerList=${DATAGRID_APP_HOTROD_SERVICE_HOST}:${DATAGRID_APP_HOTROD_SERVICE_PORT}
+      #RESOURCE ADAPTERS
+      RESOURCE_ADAPTERS=MAT_CACHE
+      MAT_CACHE_ID=infinispanRemQSDSL
+      MAT_CACHE_MODULE_SLOT=main
+      MAT_CACHE_MODULE_ID=org.jboss.teiid.resource-adapter.infinispan.dsl
+      MAT_CACHE_CONNECTION_CLASS=org.teiid.resource.adapter.infinispan.dsl.InfinispanManagedConnectionFactory
+      MAT_CACHE_CONNECTION_JNDI=java:/infinispanRemoteDSL
+      MAT_CACHE_PROPERTY_CacheTypeMap="addressbook:com.redhat.xpaas.datagrid.hotrod.query.domain.Person;id"
+      MAT_CACHE_PROPERTY_ProtobufDefinitionFile=/xpaas/addressbook.proto
+      MAT_CACHE_PROPERTY_MessageDescriptor=xpaas.Person
+      MAT_CACHE_PROPERTY_Module=com.client.xpaas.person.pojos
+      MAT_CACHE_PROPERTY_MessageMarshallers=com.redhat.xpaas.datagrid.hotrod.query.domain.Person:com.redhat.xpaas.datagrid.hotrod.query.marshallers.PersonMarshaller
+      MAT_CACHE_PROPERTY_RemoteServerList=${DATAGRID_APP_HOTROD_SERVICE_HOST}:${DATAGRID_APP_HOTROD_SERVICE_PORT}
+      MAT_CACHE_PROPERTY_StagingCacheName=addressbook_staging
+      MAT_CACHE_PROPERTY_AliasCacheName=addressbook_alias
