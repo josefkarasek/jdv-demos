@@ -1,0 +1,7 @@
+---
+kind: ImageStream
+apiVersion: v1
+metadata:
+  name: postgresql
+spec:
+  dockerImageRepository: registry.access.redhat.com/openshift3/postgresql-92-rhel7

@@ -1,0 +1,12 @@
+package xpaas;
+
+/* @Indexed */
+message Person {
+
+   /* @IndexedField */
+   required string name = 1;
+
+   /* @IndexedField(index=true, store=false) */
+   required int32 id = 2;
+
+}
