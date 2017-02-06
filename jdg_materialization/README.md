@@ -16,7 +16,7 @@ oc create -f https://raw.githubusercontent.com/openshift/origin/master/examples/
 
 # Start postgresql
 oc new-app --template=postgresql-ephemeral \
--p DATABASE_SERVICE_NAME=testdb-postgresql \
+-p DATABASE_SERVICE_NAME=postgresql \
 -p POSTGRESQL_USER=testuser \
 -p POSTGRESQL_PASSWORD=testpwd \
 -p POSTGRESQL_DATABASE=testdb \
@@ -28,14 +28,22 @@ oc exec -i <postgresql_pod> -- /bin/sh -i -c 'psql -h 127.0.0.1 -U $POSTGRESQL_U
 # Create service account with secrets
 oc create -f jdv-sa.yaml
 
+# grant view rights on the project
+oc policy add-role-to-user view system:serviceaccount:$(oc project -q):datavirt-service-account -n $(oc project -q)
+
 oc new-app --template=datagrid65-basic \
--p DATAVIRT_CACHE_NAMES=addressbook \
--p INFINISPAN_CONNECTORS=hotrod
+  -p DATAVIRT_CACHE_NAMES=addressbook \
+  -p CACHE_NAMES="" \
+  -p INFINISPAN_CONNECTORS=hotrod
 
 oc new-app --template=datavirt63-secure-s2i \
   -p SOURCE_REPOSITORY_URL=https://github.com/josefkarasek/jdv-demos.git \
   -p CONTEXT_DIR=jdg_materialization/src \
   -p TEIID_USERNAME=teiidUser \
-  -p TEIID_PASSWORD=JBoss.123
+  -p TEIID_PASSWORD=JBoss.123 \
+  -p HTTPS_NAME=jboss \
+  -p HTTPS_PASSWORD=mykeystorepass \
+  -p JGROUPS_ENCRYPT_NAME=secret-key \
+  -p JGROUPS_ENCRYPT_PASSWORD=password
 
 ```

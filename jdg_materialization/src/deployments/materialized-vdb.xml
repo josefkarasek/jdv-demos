@@ -51,12 +51,6 @@
                "teiid_rel:MATVIEW_STATUS_TABLE" 'Example.status',
                "teiid_rel:MATVIEW_ONERROR_ACTION" 'THROW_EXCEPTION')
  		AS SELECT  name, id from PersonInfoModel.PersonInfo;
-
- 		CREATE VIRTUAL PROCEDURE delete_by_key(IN "old_id" INTEGER, OUT result INTEGER) AS
-			BEGIN
-				DELETE FROM PersonMatCache.Person WHERE "id" = "old_id";
-				DELETE FROM PersonMatCache.ST_Person WHERE "id" = "old_id";
-			END;
     	]]>
 		</metadata>
 	</model>
