@@ -46,4 +46,8 @@ oc new-app --template=datavirt63-secure-s2i \
   -p JGROUPS_ENCRYPT_NAME=secret-key \
   -p JGROUPS_ENCRYPT_PASSWORD=password
 
+# Query JDV
+cd client
+mvn package exec:java -Dorg.teiid.ssl.trustStore=truststore.ts -Dexec.args='<jdbc-jdv-app-route>'
+
 ```
