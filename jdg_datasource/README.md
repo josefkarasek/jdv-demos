@@ -12,6 +12,9 @@ oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templ
 # Create service account with secrets
 oc create -f jdv-sa.yaml
 
+# grant view rights on the project
+oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default -n $(oc project -q)
+
 oc new-app --template=datagrid65-basic \
   -p CACHE_NAMES=addressbook \
   -p INFINISPAN_CONNECTORS=hotrod
@@ -24,7 +27,10 @@ oc new-app --template=datavirt63-secure-s2i \
   -p HTTPS_NAME=jboss \
   -p HTTPS_PASSWORD=mykeystorepass \
   -p JGROUPS_ENCRYPT_NAME=secret-key \
-  -p JGROUPS_ENCRYPT_PASSWORD=password
+  -p JGROUPS_ENCRYPT_PASSWORD=password \
+  -p SSO_URL="''" \
+  -p SSO_REALM="''" \
+  -p SSO_SECRET="''"
 
 # Query JDV
 cd client

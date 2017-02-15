@@ -44,7 +44,10 @@ oc new-app --template=datavirt63-secure-s2i \
   -p HTTPS_NAME=jboss \
   -p HTTPS_PASSWORD=mykeystorepass \
   -p JGROUPS_ENCRYPT_NAME=secret-key \
-  -p JGROUPS_ENCRYPT_PASSWORD=password
+  -p JGROUPS_ENCRYPT_PASSWORD=password \
+  -p SSO_URL="''" \
+  -p SSO_REALM="''" \
+  -p SSO_SECRET="''"
 
 # Query JDV
 cd client
