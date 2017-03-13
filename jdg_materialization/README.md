@@ -16,11 +16,11 @@ oc create -f https://raw.githubusercontent.com/openshift/origin/master/examples/
 
 # Start postgresql
 oc new-app --template=postgresql-ephemeral \
--p DATABASE_SERVICE_NAME=postgresql \
--p POSTGRESQL_USER=testuser \
--p POSTGRESQL_PASSWORD=testpwd \
--p POSTGRESQL_DATABASE=testdb \
--p POSTGRESQL_VERSION=latest
+  -p DATABASE_SERVICE_NAME=postgresql \
+  -p POSTGRESQL_USER=testuser \
+  -p POSTGRESQL_PASSWORD=testpwd \
+  -p POSTGRESQL_DATABASE=testdb \
+  -p POSTGRESQL_VERSION=latest
 
 # Init PostgreSQL
 oc exec -i <postgresql_pod> -- /bin/sh -i -c 'psql -h 127.0.0.1 -U $POSTGRESQL_USER -q -d $POSTGRESQL_DATABASE' < init.sql
@@ -51,6 +51,6 @@ oc new-app --template=datavirt63-secure-s2i \
 
 # Query JDV
 cd client
-mvn package exec:java -Dorg.teiid.ssl.trustStore=truststore.ts -Dexec.args='<jdbc-jdv-app-route>'
+mvn package exec:java -Dorg.teiid.ssl.trustStore=truststore.ts -Dorg.teiid.ssl.protocol=TLSv1.2 -Dexec.args='<jdbc-jdv-app-route>'
 
 ```

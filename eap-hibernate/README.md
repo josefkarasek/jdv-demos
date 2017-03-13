@@ -7,6 +7,7 @@ oc project jdv-datafederation
 
 # Create Service Account
 oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/secrets/eap-app-secret.json
+oc policy add-role-to-user view system:serviceaccount:$(oc project -q):eap-service-account -n $(oc project -q)
 
 # Add and link config secret
 oc secrets new eap-app-config datasources.env

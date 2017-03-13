@@ -34,5 +34,5 @@ oc new-app --template=datavirt63-secure-s2i \
 
 # Query JDV
 cd client
-mvn package exec:java -Dorg.teiid.ssl.trustStore=truststore.ts -Dexec.args='<jdbc-jdv-app-route>'
+mvn package exec:java -Dorg.teiid.ssl.trustStore=truststore.ts -Dorg.teiid.ssl.protocol=TLSv1.2 -Dexec.args='<jdbc-jdv-app-route>'
 ```

@@ -25,23 +25,25 @@ oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templ
 # By default the quickstart configuration uses 'derby' data source,
 # to use postgresql add this variable to deployment config in
 # template
-oc edit template datavirt63-secure-s2i 
+oc edit template datavirt63-secure-s2i
 # copy-paste:
           - name: QS_DB_TYPE
             value: postgresql
 
+# Add your specific configuration to datasources.env file:
+# TESTDB_POSTGRESQL_SERVICE_HOST=<your_server>
 # Create secret with configuration
 oc secrets new datavirt-app-config datasources.env
 
 # Process the template
-oc process datavirt63-secure-s2i \
-	-v TEIID_USERNAME='teiidUser' \
-	-v TEIID_PASSWORD='JBoss.123' \
-	-v SOURCE_REPOSITORY_URL=https://github.com/josefkarasek/jdv-demos.git \
-	-v SOURCE_REPOSITORY_REF=master \
-	-v CONTEXT_DIR='external_postgresql/vdb' | oc create -f -
+oc new-app --template=datavirt63-secure-s2i \
+	-p TEIID_USERNAME='teiidUser' \
+	-p TEIID_PASSWORD='JBoss.123' \
+	-p SOURCE_REPOSITORY_URL=https://github.com/josefkarasek/jdv-demos.git \
+	-p SOURCE_REPOSITORY_REF=master \
+	-p CONTEXT_DIR='external_postgresql/vdb'
 
 # Query JDV
 cd client
-mvn package exec:java -Dorg.teiid.ssl.trustStore=truststore.ts -Dexec.args='<jdbc-jdv-app-route>'
+mvn package exec:java -Dorg.teiid.ssl.trustStore=truststore.ts -Dorg.teiid.ssl.protocol=TLSv1.2 -Dexec.args='<jdbc-jdv-app-route>'
 ```

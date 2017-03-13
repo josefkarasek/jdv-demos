@@ -1,22 +1,11 @@
 Demonstration of Rolling update with JDV in OpenShift.
-Note that clients can loose connection during update. 
+Note that clients can loose connection during update.
 ```
 # Create new project
 oc new-project jdv-rolling
 
-# Create Image Stream
-cat <<EOF | oc create -n openshift -f -
-{
-  "kind": "ImageStream",
-  "apiVersion": "v1",
-  "metadata": {
-    "name": "jboss-datavirt63-openshift"
-  },
-  "spec": {
-    "dockerImageRepository": "<docker_repository_url>"
-  }
-}
-EOF
+# Create Image Stream if doesn't exist (performed by OpenShift administrator)
+oc create -f https://raw.githubusercontent.com/josefkarasek/jdv-demos/master/datafederation/datavirt-is.yaml -n openshift
 
 # Create Service Account
 oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/secrets/datavirt-app-secret.yaml
@@ -29,11 +18,11 @@ oc create -f datavirt63-secure-rolling-s2i.json
 oc secrets new datavirt-app-config empty.env
 
 oc process datavirt63-secure-rolling-s2i \
--v TEIID_USERNAME='teiidUser' \
--v TEIID_PASSWORD='JBoss.123' \
--v SOURCE_REPOSITORY_URL=https://github.com/josefkarasek/jdv-demos.git \
--v SOURCE_REPOSITORY_REF=master \
--v CONTEXT_DIR='rolling_update/v1' | oc create -f -
+  -p TEIID_USERNAME='teiidUser' \
+  -p TEIID_PASSWORD='JBoss.123' \
+  -p SOURCE_REPOSITORY_URL=https://github.com/josefkarasek/jdv-demos.git \
+  -p SOURCE_REPOSITORY_REF=master \
+  -p CONTEXT_DIR='rolling_update/v1' | oc create -f -
 
 # Wait for start of 5 replicas
 # Test the application
