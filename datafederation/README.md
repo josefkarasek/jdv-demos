@@ -13,7 +13,9 @@ oc policy add-role-to-user view system:serviceaccount:$(oc project -q):datavirt-
 oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/datavirt/datavirt63-extensions-support-s2i.json
 
 # Process template
-oc new-app --template=datavirt63-extensions-support-s2i -p TEIID_USERNAME=teiidUser -p TEIID_PASSWORD=JBoss.123
+oc new-app --template=datavirt63-extensions-support-s2i \
+  -p TEIID_USERNAME=teiidUser \
+  -p TEIID_PASSWORD=JBoss.123
 
 # Done. You can access the application:
 cd client
