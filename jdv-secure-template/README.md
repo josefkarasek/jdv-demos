@@ -3,19 +3,8 @@ Simple demo that demonstrates how to deploy JDV with an internal PostgreSQL.
 # Create new project
 oc new-project jdv-secure-template
 
-# Create Image Stream for PostgreSQL database in 'openshift' namespace.
-cat <<EOF | oc create -n openshift -f -
-{
-  "kind": "ImageStream",
-  "apiVersion": "v1",
-  "metadata": {
-    "name": "postgresql"
-  },
-  "spec": {
-    "dockerImageRepository": "registry.access.redhat.com/openshift3/postgresql-92-rhel7"
-  }
-}
-EOF
+# Create Image Stream for PostgreSQL database in 'openshift' namespace
+oc create -f https://raw.githubusercontent.com/josefkarasek/jdv-demos/master/common/postgres-is.yaml -n openshift
 
 # Create Service Account
 oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/secrets/datavirt-app-secret.yaml

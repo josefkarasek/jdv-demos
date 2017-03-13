@@ -4,7 +4,7 @@
 oc new-project jdv-jdg-materialization
 
 # Create Image Stream for PostgreSQL database in 'openshift' namespace
-oc create -n openshift -f https://raw.githubusercontent.com/josefkarasek/jdv-demos/master/jdg-datasource/postgres-is.yaml
+oc create -n openshift -f https://raw.githubusercontent.com/josefkarasek/jdv-demos/master/common/postgres-is.yaml
 
 # Create templates
 # Datavirt secured

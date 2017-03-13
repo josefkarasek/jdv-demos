@@ -3,7 +3,7 @@
 oc new-project jdv-datafederation
 
 # Create Image Stream if doesn't exist (performed by OpenShift administrator)
-oc create -f https://raw.githubusercontent.com/josefkarasek/jdv-demos/master/datafederation/datavirt-is.yaml -n openshift
+oc create -f https://raw.githubusercontent.com/josefkarasek/jdv-demos/master/common/datavirt-is.yaml -n openshift
 
 # Create Service Account
 oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/secrets/datavirt-app-secret.yaml
