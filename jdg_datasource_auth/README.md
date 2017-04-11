@@ -1,5 +1,32 @@
 ### JBoss Data Grid as datasource for JBoss Data Virtualization with authentication
+The following tasks are necessary to set up authentication between JDV and JDG. Note that only `hotrod`
+protocol is supported for communication between JDV and JDG.
+1. Create new user on JDG and set up caches.
+The following assumes we're working witch cache named `ADDRESSBOOK`. [Source code](https://github.com/josefkarasek/jdv-demos/blob/master/jdg_datasource_auth/datagrid65-basic-auth.json#L384-L395)
+```
+HOTROD_AUTHENTICATION=true
+USERNAME=jdg
+PASSWORD=JBoss.123
+CONTAINER_SECURITY_ROLE_MAPPER=identity-role-mapper
+CONTAINER_SECURITY_ROLES=admin=ALL;
+```
+Enable authorization and add the cache to authorization group `admin`. [Source code](https://github.com/josefkarasek/jdv-demos/blob/master/jdg_datasource_auth/datagrid65-basic-auth.json#L397-L404)
+```
+ADDRESSBOOK_CACHE_SECURITY_AUTHORIZATION_ENABLED=true
+ADDRESSBOOK_CACHE_SECURITY_AUTHORIZATION_ROLES=admin
+```
+2. Pass authentication credentials to JDV. [Source code](https://github.com/josefkarasek/jdv-demos/blob/master/jdg_datasource_auth/jdv-sa.yaml#L52-L58)
+```
+JDG_PROPERTY_AuthUserName=jdg
+JDG_PROPERTY_AuthPassword=JBoss.123
+JDG_PROPERTY_AuthApplicationRealm=ApplicationRealm
+JDG_PROPERTY_AuthServerName=jdg-server
+JDG_PROPERTY_AuthSASLMechanism=DIGEST-MD5
+JDG_PROPERTY_AdminUserName=jdg
+JDG_PROPERTY_AdminPassword=JBoss.123
+```
 
+#### Deployment instructions
 ```
 # Create new project
 oc new-project jdv-jdg-datasource
